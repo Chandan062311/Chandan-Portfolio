@@ -1,26 +1,682 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-background: #080b0f;
+  --color-surface: #111720;
+  --color-surface-strong: #18212d;
+  --color-text: #f1f5f9;
+  --color-muted: #c1cbd6;
+  --color-accent-crimson: #d88a2a;
+  --color-accent-steel: #5fa8a0;
+  --color-accent-glow: rgba(216, 138, 42, 0.34);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-body, "Space Grotesk", "Segoe UI", sans-serif);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 86% 8%, color-mix(in srgb, var(--color-accent-crimson) 12%, transparent), transparent 38%),
+    radial-gradient(circle at 20% 14%, color-mix(in srgb, var(--color-accent-steel) 10%, transparent), transparent 34%),
+    linear-gradient(140deg, var(--color-background) 0%, var(--color-background) 36%, var(--color-surface) 100%);
+  background-attachment: fixed;
+  background-size: cover;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body, "Space Grotesk"), sans-serif;
+  line-height: 1.6;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  opacity: 0.14;
+  z-index: 0;
+  animation: scanShift 18s linear infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-accent-crimson) 30%, transparent);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-accent-crimson) 50%, transparent);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent-crimson) 35%, transparent);
+  color: #ffffff;
+}
+
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-accent-crimson);
+  outline-offset: 3px;
+}
+
+/* ========== TYPOGRAPHY ========== */
+
+.section-title {
+  font-family: var(--font-heading, "Rajdhani"), sans-serif;
+  line-height: 0.9;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.font-heading {
+  font-family: var(--font-heading, "Rajdhani"), sans-serif;
+}
+
+.text-muted {
+  color: var(--color-muted);
+}
+
+/* ========== SECTION SYSTEM ========== */
+
+.anchor-offset {
+  scroll-margin-top: 6.1rem;
+}
+
+.section-shell {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  /* Overlap adjacent sections slightly to eliminate dark gaps */
+  margin-top: -1px;
+}
+
+.section-shell--home {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Section divider fade – top and bottom for seamless blending */
+.section-shell::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to top, transparent, var(--color-background));
+  z-index: 3;
+  pointer-events: none;
+}
+
+.section-shell::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--color-background));
+  z-index: 3;
+  pointer-events: none;
+}
+
+.section-shell--home::before,
+.section-shell--home::after {
+  display: none;
+}
+
+.section-fallback-gradient {
+  position: absolute;
+  inset: 0;
+  z-index: -4;
+  background:
+    radial-gradient(circle at 25% 24%, color-mix(in srgb, var(--color-accent-crimson) 20%, transparent), transparent 40%),
+    linear-gradient(165deg, color-mix(in srgb, var(--color-surface) 90%, transparent), color-mix(in srgb, var(--color-background) 98%, transparent));
+}
+
+.section-image-layer {
+  position: absolute;
+  inset: -4%;
+  z-index: -3;
+}
+
+.section-image {
+  object-fit: cover;
+}
+
+.section-overlay-layer {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(4, 7, 10, calc(var(--section-overlay-strength, 0.55) + 0.12)),
+      rgba(4, 7, 10, var(--section-overlay-strength, 0.55)) 38%,
+      rgba(4, 7, 10, calc(var(--section-overlay-strength, 0.55) + 0.12)) 100%
+    );
+}
+
+.section-overlay-layer::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: clamp(88px, 12vw, 150px);
+  height: clamp(88px, 12vw, 150px);
+  background: radial-gradient(
+    circle at bottom right,
+    rgba(4, 7, 10, 0.96) 0%,
+    rgba(4, 7, 10, 0.88) 44%,
+    rgba(4, 7, 10, 0) 78%
+  );
+}
+
+.section-noise-layer {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image:
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.05), transparent 60%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.01),
+      rgba(255, 255, 255, 0.01) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+}
+
+.section-content-layer {
+  position: relative;
+  z-index: 2;
+}
+
+/* ========== SECTION FRAME ========== */
+
+.section-frame {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.6rem;
+  padding: 1rem 1.1rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    linear-gradient(120deg, color-mix(in srgb, var(--color-accent-crimson) 7%, transparent), transparent 30%),
+    rgba(4, 7, 10, 0.5);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-accent-crimson) 8%, transparent), 0 16px 34px -24px var(--color-accent-glow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* ========== HUD ELEMENTS ========== */
+
+.hud-kicker {
+  color: var(--color-accent-crimson);
+  font-family: var(--font-heading, "Rajdhani"), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.hud-panel {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    linear-gradient(125deg, color-mix(in srgb, var(--color-accent-crimson) 7%, transparent), transparent 28%),
+    rgba(4, 7, 10, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.6rem;
+  padding: 1.25rem;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-accent-crimson) 8%, transparent),
+    0 22px 40px -26px var(--color-accent-glow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s ease,
+    background 0.35s ease;
+}
+
+.hud-panel:hover {
+  border-color: color-mix(in srgb, var(--color-accent-crimson) 35%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-accent-crimson) 20%, transparent),
+    0 0 30px -10px color-mix(in srgb, var(--color-accent-crimson) 15%, transparent),
+    0 28px 50px -20px var(--color-accent-glow);
+}
+
+.hud-chip {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.5rem;
+  background: rgba(4, 7, 10, 0.7);
+  padding: 0.7rem 0.8rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition:
+    border-color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.hud-chip:hover {
+  border-color: color-mix(in srgb, var(--color-accent-crimson) 30%, transparent);
+  box-shadow: 0 0 20px -8px color-mix(in srgb, var(--color-accent-crimson) 15%, transparent);
+}
+
+.resource-tag {
+  border: 1px solid color-mix(in srgb, var(--color-accent-steel) 32%, transparent);
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, var(--color-accent-steel) 8%, transparent);
+  color: var(--color-text);
+  font-size: 0.66rem;
+  letter-spacing: 0.13em;
+  padding: 0.3rem 0.6rem;
+  text-transform: uppercase;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+  cursor: default;
+}
+
+.resource-tag:hover {
+  transform: translateY(-2px) scale(1.06);
+  border-color: color-mix(in srgb, var(--color-accent-steel) 60%, transparent);
+  background: color-mix(in srgb, var(--color-accent-steel) 14%, transparent);
+  box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--color-accent-steel) 25%, transparent);
+}
+
+/* ========== TIMELINE ========== */
+
+.timeline-track {
+  position: relative;
+}
+
+.timeline-track::before {
+  content: "";
+  position: absolute;
+  left: 0.72rem;
+  top: 0.2rem;
+  bottom: 0.2rem;
+  width: 2px;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-accent-crimson) 55%, transparent), color-mix(in srgb, var(--color-accent-steel) 25%, transparent));
+  opacity: 0.8;
+}
+
+.timeline-node {
+  position: absolute;
+  left: -1.12rem;
+  top: 1.18rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 999px;
+  border: 2px solid color-mix(in srgb, var(--color-accent-crimson) 95%, transparent);
+  background: rgba(8, 11, 15, 0.9);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-accent-crimson) 12%, transparent);
+  transition: box-shadow 0.4s ease, transform 0.4s ease;
+}
+
+.timeline-node-glow {
+  box-shadow:
+    0 0 0 5px color-mix(in srgb, var(--color-accent-crimson) 20%, transparent),
+    0 0 16px 2px color-mix(in srgb, var(--color-accent-crimson) 25%, transparent);
+}
+
+/* ========== RADAR ========== */
+
+.radar-ping {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-accent-steel) 85%, transparent);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent-steel) 35%, transparent);
+  animation: radarPulse 2.2s ease-out infinite;
+}
+
+/* ========== BORDERS & ACCENTS ========== */
+
+.steel-border {
+  border: 1px solid color-mix(in srgb, var(--color-accent-steel) 38%, transparent);
+}
+
+/* ========== ANIMATIONS ========== */
+
+.ambient-pulse {
+  animation: ambientPulse var(--ambient-duration, 4s) ease-in-out infinite;
+}
+
+/* ========== PROGRESS BAR ========== */
+
+.hud-progress-track {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.hud-progress-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--color-accent-steel), var(--color-accent-crimson));
+  transition: transform 0.15s ease-out;
+}
+
+/* ========== GLITCH TEXT ========== */
+
+.glitch-text {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.glitch-active::before {
+  color: var(--color-accent-crimson);
+  animation: glitchLayer1 0.15s ease-in-out;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.glitch-active::after {
+  color: var(--color-accent-steel);
+  animation: glitchLayer2 0.15s ease-in-out;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+
+/* ========== ANIMATED GRADIENT TEXT ========== */
+
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--color-text) 0%,
+    var(--color-accent-crimson) 25%,
+    var(--color-text) 50%,
+    var(--color-accent-steel) 75%,
+    var(--color-text) 100%
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 8s ease-in-out infinite;
+}
+
+/* ========== ANIMATED BORDER ========== */
+
+.animated-border-wrapper {
+  position: relative;
+  border-radius: 0.6rem;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--border-angle, 0deg),
+    color-mix(in srgb, var(--color-accent-steel) 10%, transparent),
+    color-mix(in srgb, var(--color-accent-crimson) 50%, transparent),
+    color-mix(in srgb, var(--color-accent-steel) 30%, transparent),
+    color-mix(in srgb, var(--color-accent-crimson) 10%, transparent),
+    color-mix(in srgb, var(--color-accent-steel) 10%, transparent)
+  );
+  animation: borderRotate 6s linear infinite;
+}
+
+.animated-border-inner {
+  border-radius: calc(0.6rem - 2px);
+  background: var(--color-background);
+}
+
+/* ========== BEACON ========== */
+
+.beacon {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--color-accent-steel);
+  position: relative;
+}
+
+.beacon::before,
+.beacon::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--color-accent-steel) 40%, transparent);
+  animation: beaconPulse 2.5s ease-out infinite;
+}
+
+.beacon::after {
+  inset: -10px;
+  animation-delay: 0.8s;
+}
+
+/* ========== SCROLL INDICATOR ========== */
+
+.scroll-indicator {
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+/* ========== 3D SCENE OVERLAY ========== */
+
+.three-canvas-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ========== KEYFRAMES ========== */
+
+@keyframes ambientPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-accent-crimson) 8%, transparent), 0 22px 40px -26px var(--color-accent-glow);
+  }
+  50% {
+    transform: scale(var(--ambient-intensity, 1.02));
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-accent-crimson) 16%, transparent), 0 28px 50px -18px var(--color-accent-glow);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-accent-crimson) 8%, transparent), 0 22px 40px -26px var(--color-accent-glow);
+  }
+}
+
+@keyframes radarPulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent-steel) 36%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 18px transparent;
+  }
+}
+
+@keyframes scanShift {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(8px);
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+@keyframes borderRotate {
+  0% {
+    --border-angle: 0deg;
+  }
+  100% {
+    --border-angle: 360deg;
+  }
+}
+
+@keyframes glitchLayer1 {
+  0% { opacity: 0; transform: translate(0); }
+  20% { opacity: 0.8; transform: translate(-3px, 1px); }
+  40% { opacity: 0; transform: translate(3px, -1px); }
+  60% { opacity: 0.6; transform: translate(-2px, 0); }
+  80% { opacity: 0; transform: translate(1px, 1px); }
+  100% { opacity: 0; transform: translate(0); }
+}
+
+@keyframes glitchLayer2 {
+  0% { opacity: 0; transform: translate(0); }
+  20% { opacity: 0.6; transform: translate(3px, -1px); }
+  40% { opacity: 0; transform: translate(-3px, 1px); }
+  60% { opacity: 0.8; transform: translate(2px, 0); }
+  80% { opacity: 0; transform: translate(-1px, -1px); }
+  100% { opacity: 0; transform: translate(0); }
+}
+
+@keyframes beaconPulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.5);
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes radarRingExpand {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scrollBounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(8px);
+  }
+  60% {
+    transform: translateY(4px);
+  }
+}
+
+/* Register custom property for conic-gradient animation */
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* ========== RESPONSIVE ========== */
+
+/* View Transition for theme switching */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+  animation-timing-function: ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .anchor-offset {
+    scroll-margin-top: 5.2rem;
+  }
+
+  .section-image-layer {
+    inset: -2%;
+  }
+
+  .section-frame {
+    margin-bottom: 1.35rem;
+    padding: 0.9rem 0.95rem;
+  }
+
+  .hud-panel {
+    padding: 1rem;
+  }
+
+  .hud-kicker {
+    letter-spacing: 0.16em;
+  }
+
+  .section-shell::before,
+  .section-shell::after {
+    height: 40px;
+  }
+}
+
+/* ========== REDUCED MOTION ========== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
 }
