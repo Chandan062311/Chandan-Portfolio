@@ -35,7 +35,7 @@ export function HeroTextOnly() {
         <Container className="py-24 md:py-32">
           <div className="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
             <Reveal>
-              <div className="space-y-5" style={{ textShadow: '0 2px 16px rgba(0,0,0,0.7), 0 0 4px rgba(0,0,0,0.5)' }}>
+              <div className="space-y-5" style={{ textShadow: '0 4px 24px rgba(0,0,0,0.9), 0 1px 6px rgba(0,0,0,0.8)' }}>
                 <p className="hud-kicker">Command Deck</p>
                 <h1 className="section-title gradient-text text-[clamp(3.2rem,12vw,6.1rem)] leading-[0.86] md:text-[7.3rem]">
                   <GlitchText text={siteData.name} delay={0.3} speed={30} />

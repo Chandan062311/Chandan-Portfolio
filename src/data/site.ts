@@ -37,7 +37,7 @@ export const siteData: SiteConfig = {
     home: {
       src: "/theme/dome/hero-command-deck.png",
       alt: "Subterranean command deck atmosphere with mining station silhouettes.",
-      overlayStrength: 0.62,
+      overlayStrength: 0.68,
       focalPosition: "50% center",
       mobileFocalPosition: "52% center",
     },
