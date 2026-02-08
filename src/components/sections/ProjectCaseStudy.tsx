@@ -5,7 +5,7 @@ import type { ProjectItem } from "@/types/portfolio";
 
 export function ProjectCaseStudy({ project }: { project: ProjectItem }) {
   return (
-    <div className="space-y-8 p-8 md:p-10">
+    <div className="space-y-6 p-4 sm:space-y-8 sm:p-6 md:p-10">
       {/* Header */}
       <div className="space-y-3 border-b border-white/8 pb-8">
         <p className="hud-kicker text-[10px] tracking-[0.2em]">Case Study</p>
@@ -17,7 +17,7 @@ export function ProjectCaseStudy({ project }: { project: ProjectItem }) {
 
       {/* Problem */}
       <Reveal variant="fade-left">
-        <div className="rounded-xl border border-[color:var(--color-accent-crimson)]/15 bg-[color:var(--color-accent-crimson)]/[0.03] p-6">
+        <div className="rounded-xl border border-[color:var(--color-accent-crimson)]/15 bg-[color:var(--color-accent-crimson)]/[0.03] p-4 sm:p-6">
           <p className="hud-kicker mb-3 text-[10px] tracking-[0.2em]">The Problem</p>
           <p className="leading-relaxed text-[color:var(--color-text)]">{project.problem}</p>
         </div>
@@ -30,7 +30,7 @@ export function ProjectCaseStudy({ project }: { project: ProjectItem }) {
           <div className="space-y-3">
             {project.decisions.map((decision, i) => (
               <Reveal key={decision} delay={0.15 + i * 0.08} variant="fade-up">
-                <div className="flex items-start gap-4 rounded-xl border border-white/8 bg-white/[0.02] p-5">
+                <div className="flex items-start gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-3 sm:gap-4 sm:p-5">
                   <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[color:var(--color-accent-steel)]/30 font-heading text-xs font-bold text-[color:var(--color-accent-steel)]">
                     {i + 1}
                   </span>
@@ -44,7 +44,7 @@ export function ProjectCaseStudy({ project }: { project: ProjectItem }) {
 
       {/* Outcome */}
       <Reveal variant="scale" delay={0.3}>
-        <div className="rounded-xl border border-[color:var(--color-accent-steel)]/20 bg-[color:var(--color-accent-steel)]/[0.05] p-6">
+        <div className="rounded-xl border border-[color:var(--color-accent-steel)]/20 bg-[color:var(--color-accent-steel)]/[0.05] p-4 sm:p-6">
           <p className="hud-kicker mb-3 text-[10px] tracking-[0.2em]" style={{ color: "var(--color-accent-steel)" }}>
             Outcome
           </p>

@@ -101,7 +101,7 @@ export function SiteHeader() {
           </nav>
           {/* Mobile nav with larger touch targets */}
           <nav
-            className="max-w-[58vw] overflow-x-auto xl:hidden"
+            className="max-w-[65vw] overflow-x-auto xl:hidden"
             aria-label="Mobile navigation"
             style={{
               WebkitMaskImage: "linear-gradient(to right, black 85%, transparent 100%)",
@@ -131,7 +131,7 @@ export function SiteHeader() {
             <ThemeToggle />
             <a
               href={`mailto:${siteData.email}`}
-              className="inline-flex items-center rounded border border-[color:var(--color-accent-crimson)] px-3 py-1.5 text-[10px] uppercase tracking-[0.16em] text-[color:var(--color-text)] transition-all duration-300 hover:bg-[color:var(--color-accent-crimson)]/20 hover:shadow-[0_0_15px_-3px_var(--color-accent-glow)]"
+              className="inline-flex items-center rounded border border-[color:var(--color-accent-crimson)] px-3 py-2.5 text-[10px] uppercase tracking-[0.16em] text-[color:var(--color-text)] transition-all duration-300 hover:bg-[color:var(--color-accent-crimson)]/20 hover:shadow-[0_0_15px_-3px_var(--color-accent-glow)] sm:px-4"
             >
               Contact
             </a>

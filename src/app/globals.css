@@ -33,6 +33,7 @@ body {
   background-attachment: fixed;
   background-size: cover;
   background-color: var(--color-background);
+  -webkit-overflow-scrolling: touch;
   color: var(--color-text);
   font-family: var(--font-body, "Space Grotesk"), sans-serif;
   line-height: 1.6;
@@ -626,7 +627,61 @@ select:focus-visible {
   animation-timing-function: ease-in-out;
 }
 
+/* Guard hover effects for pointer devices only */
+@media (hover: hover) and (pointer: fine) {
+  .hud-panel:hover {
+    border-color: color-mix(in srgb, var(--color-accent-crimson) 35%, transparent);
+  }
+  .resource-tag:hover {
+    transform: translateY(-2px) scale(1.06);
+  }
+  .hud-chip:hover {
+    border-color: color-mix(in srgb, var(--color-accent-crimson) 30%, transparent);
+  }
+}
+
+/* Remove hover transforms on touch devices to avoid sticky hover */
+@media (hover: none) {
+  .hud-panel:hover,
+  .resource-tag:hover,
+  .hud-chip:hover {
+    transform: none;
+  }
+}
+
+/* Small phones — 480px and below */
+@media (max-width: 480px) {
+  .section-frame {
+    margin-bottom: 1rem;
+    padding: 0.75rem 0.8rem;
+  }
+
+  .hud-panel {
+    padding: 0.85rem;
+  }
+
+  .hud-kicker {
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+  }
+
+  .resource-tag {
+    font-size: 0.6rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .section-shell::before,
+  .section-shell::after {
+    height: 28px;
+  }
+}
+
+/* Tablets and below */
 @media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+  }
+
   .anchor-offset {
     scroll-margin-top: 5.2rem;
   }

@@ -32,15 +32,15 @@ export function HeroTextOnly() {
         {/* 3D WebGL Scene Layer */}
         <HeroScene />
 
-        <Container className="py-24 md:py-32">
+        <Container className="py-16 sm:py-20 md:py-28 lg:py-32">
           <div className="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
             <Reveal>
               <div className="space-y-5" style={{ textShadow: '0 4px 24px rgba(0,0,0,0.9), 0 1px 6px rgba(0,0,0,0.8)' }}>
                 <p className="hud-kicker">Command Deck</p>
-                <h1 className="section-title gradient-text text-[clamp(3.2rem,12vw,6.1rem)] leading-[0.86] md:text-[7.3rem]">
+                <h1 className="section-title gradient-text text-[clamp(2.4rem,10vw,5rem)] leading-[0.86] sm:text-[clamp(3rem,11vw,5.5rem)] md:text-[clamp(4rem,9vw,6rem)] lg:text-[7.3rem]">
                   <GlitchText text={siteData.name} delay={0.3} speed={30} />
                 </h1>
-                <div className="max-w-2xl text-base uppercase tracking-[0.08em] text-[color:var(--color-accent-steel)] md:text-xl">
+                <div className="max-w-2xl text-sm uppercase tracking-[0.06em] text-[color:var(--color-accent-steel)] sm:text-base sm:tracking-[0.08em] md:text-xl">
                   <StaggerReveal text={siteData.title} delay={1.2} />
                 </div>
                 <div className="max-w-2xl text-[color:var(--color-text)]">

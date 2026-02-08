@@ -20,7 +20,7 @@ export function FeaturedProjectsSection() {
       title="Build Core"
       subtitle="Top three extraction zones: problem, decisions, and outcomes from shipped work."
     >
-      <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {siteData.projects.map((project, index) => (
           <Reveal key={project.name} delay={index * siteData.theme.motion.stagger} variant="scale">
             <TiltCard>
@@ -38,8 +38,8 @@ export function FeaturedProjectsSection() {
                   }}
                   aria-label={`View ${project.name} case study`}
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <h3 className="text-2xl font-semibold uppercase tracking-[0.03em] text-[color:var(--color-text)]">
+                  <div className="flex items-start justify-between gap-3 sm:gap-4">
+                    <h3 className="min-w-0 text-xl font-semibold uppercase tracking-[0.03em] text-[color:var(--color-text)] sm:text-2xl">
                       {project.name}
                     </h3>
                     <a

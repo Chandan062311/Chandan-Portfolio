@@ -23,14 +23,14 @@ export function SiteFooter() {
           </div>
 
           {/* Social links */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             {siteData.contactLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 target={link.href.startsWith("mailto:") ? undefined : "_blank"}
                 rel={link.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-                className="text-xs uppercase tracking-[0.14em] text-muted transition-colors duration-300 hover:text-[color:var(--color-accent-crimson)]"
+                className="rounded px-2.5 py-2 text-xs uppercase tracking-[0.14em] text-muted transition-colors duration-300 hover:text-[color:var(--color-accent-crimson)]"
                 aria-label={link.label}
               >
                 {link.label}
@@ -38,7 +38,7 @@ export function SiteFooter() {
             ))}
           </div>
 
-          <p className="text-[10px] uppercase tracking-[0.14em] text-muted opacity-60">
+          <p className="text-[11px] uppercase tracking-[0.14em] text-muted opacity-60">
             Dome operations theme &middot; original visual system
           </p>
         </div>
