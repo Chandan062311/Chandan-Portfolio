@@ -2,7 +2,7 @@
 
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
+import type { Mesh } from "three";
 
 interface FloatingShapeProps {
   position: [number, number, number];
@@ -19,7 +19,7 @@ function FloatingShape({
   size = 0.4,
   type = "icosahedron",
 }: FloatingShapeProps) {
-  const meshRef = useRef<THREE.Mesh>(null);
+  const meshRef = useRef<Mesh>(null);
   // eslint-disable-next-line react-hooks/purity -- stable random seed
   const phase = useMemo(() => Math.random() * Math.PI * 2, []);
 
@@ -80,20 +80,6 @@ export function FloatingShapes() {
         speed={0.25}
         size={0.3}
         type="dodecahedron"
-      />
-      <FloatingShape
-        position={[3, 2.5, -5]}
-        color="#D88A2A"
-        speed={0.18}
-        size={0.45}
-        type="octahedron"
-      />
-      <FloatingShape
-        position={[0, -1, -6]}
-        color="#D88A2A"
-        speed={0.12}
-        size={0.55}
-        type="icosahedron"
       />
     </group>
   );

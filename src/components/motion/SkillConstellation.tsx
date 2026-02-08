@@ -7,6 +7,7 @@ import {
   useMotionValue,
   useTransform,
   useSpring,
+  useReducedMotion,
 } from "framer-motion";
 
 /* ── types ─────────────────────────────────────────── */
@@ -33,6 +34,7 @@ export function SkillConstellation({
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [activeGroup, setActiveGroup] = useState<number | null>(null);
   const [dims, setDims] = useState({ w: 600, h: 520 });
+  const prefersReduced = useReducedMotion();
 
   /* responsive sizing */
   useEffect(() => {
@@ -91,7 +93,11 @@ export function SkillConstellation({
       <motion.svg
         viewBox={`0 0 ${dims.w} ${dims.h}`}
         className="absolute inset-0 h-full w-full"
-        style={{ x: parallaxX, y: parallaxY }}
+        style={{
+          x: prefersReduced ? 0 : parallaxX,
+          y: prefersReduced ? 0 : parallaxY,
+          ...(prefersReduced ? { animationPlayState: "paused" } : {}),
+        }}
         aria-label="Skill constellation visualization"
       >
         <defs>

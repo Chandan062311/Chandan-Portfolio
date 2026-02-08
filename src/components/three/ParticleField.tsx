@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/purity -- Three.js particle init uses random seeds */
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
+import { Object3D, Color, InstancedMesh } from "three";
 
 interface ParticleFieldProps {
   count?: number;
@@ -12,12 +12,13 @@ interface ParticleFieldProps {
 }
 
 export function ParticleField({
-  count = 90,
+  count = 60,
   spread = 14,
   colors = ["#D88A2A", "#5FA8A0"],
 }: ParticleFieldProps) {
-  const meshRef = useRef<THREE.InstancedMesh>(null);
-  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const meshRef = useRef<InstancedMesh>(null);
+  const dummy = useMemo(() => new Object3D(), []);
+  const frameSkip = useRef(0);
 
   const particles = useMemo(() => {
     const positions: Array<{ x: number; y: number; z: number; speed: number; phase: number; size: number }> = [];
@@ -36,10 +37,10 @@ export function ParticleField({
 
   const colorArray = useMemo(() => {
     const arr = new Float32Array(count * 3);
-    const c1 = new THREE.Color(colors[0]);
-    const c2 = new THREE.Color(colors[1]);
+    const c1 = new Color(colors[0]);
+    const c2 = new Color(colors[1]);
     for (let i = 0; i < count; i++) {
-      const c = new THREE.Color().lerpColors(c1, c2, Math.random());
+      const c = new Color().lerpColors(c1, c2, Math.random());
       arr[i * 3] = c.r;
       arr[i * 3 + 1] = c.g;
       arr[i * 3 + 2] = c.b;
@@ -49,6 +50,10 @@ export function ParticleField({
 
   useFrame(({ clock }) => {
     if (!meshRef.current) return;
+    /* Update every other frame to halve CPU cost */
+    frameSkip.current++;
+    if (frameSkip.current % 2 !== 0) return;
+
     const t = clock.elapsedTime;
 
     for (let i = 0; i < count; i++) {

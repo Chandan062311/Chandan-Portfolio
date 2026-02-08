@@ -41,7 +41,7 @@ export function HeroScene() {
         <Suspense fallback={null}>
           <AdaptiveDpr pixelated />
           <ambientLight intensity={0.3} />
-          <ParticleField count={isMobile ? 40 : 90} />
+          <ParticleField count={isMobile ? 30 : 60} />
           <FloatingGrid />
           <FloatingShapes />
         </Suspense>

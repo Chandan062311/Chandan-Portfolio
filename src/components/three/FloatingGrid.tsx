@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
+import { BufferGeometry, Float32BufferAttribute, Group } from "three";
 
 interface FloatingGridProps {
   size?: number;
@@ -15,29 +15,31 @@ export function FloatingGrid({
   divisions = 20,
   color = "#5FA8A0",
 }: FloatingGridProps) {
-  const groupRef = useRef<THREE.Group>(null);
+  const groupRef = useRef<Group>(null);
 
   const lines = useMemo(() => {
-    const geometry = new THREE.BufferGeometry();
+    const geometry = new BufferGeometry();
     const positions: number[] = [];
     const half = size / 2;
     const step = size / divisions;
 
-    // Create grid lines
     for (let i = 0; i <= divisions; i++) {
       const pos = -half + i * step;
-      // X-axis lines
       positions.push(-half, 0, pos, half, 0, pos);
-      // Z-axis lines
       positions.push(pos, 0, -half, pos, 0, half);
     }
 
     geometry.setAttribute(
       "position",
-      new THREE.Float32BufferAttribute(positions, 3),
+      new Float32BufferAttribute(positions, 3),
     );
     return geometry;
   }, [size, divisions]);
+
+  /* Dispose GPU geometry on unmount */
+  useEffect(() => {
+    return () => { lines.dispose(); };
+  }, [lines]);
 
   useFrame(({ clock }) => {
     if (!groupRef.current) return;
