@@ -105,9 +105,6 @@ export function GlitchText({
     // Clamp delay: treat anything > 10 as milliseconds for safety
     const delaySec = delay > 10 ? delay / 1000 : delay;
 
-    // Capture ref value for cleanup
-    const pendingTimeouts = timeoutsRef.current;
-
     const timer = setTimeout(() => {
       setHasStarted(true);
       // Start with scrambled text
@@ -122,11 +119,17 @@ export function GlitchText({
 
     return () => {
       clearTimeout(timer);
-      // Clean up all tracked timeouts
-      pendingTimeouts.forEach((id) => clearTimeout(id));
-      pendingTimeouts.clear();
     };
   }, [decode, delay, hasStarted, isInView, prefersReducedMotion, text]);
+
+  /* ── Clean up decode timeouts on unmount only ── */
+  useEffect(() => {
+    const pending = timeoutsRef.current;
+    return () => {
+      pending.forEach((id) => clearTimeout(id));
+      pending.clear();
+    };
+  }, []);
 
   if (prefersReducedMotion) {
     return <Tag className={className}>{text}</Tag>;
